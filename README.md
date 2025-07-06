@@ -16,7 +16,7 @@ $> go build main.go
 $> ./main
 Hello World!
 
-# 3) make rename && make run --> create a named binary (without using mv)
+# 3) make rename --> create a named binary (without using mv)
 $> go mod init hello-world
 $> go build hello-world
 $> ./hello-world
