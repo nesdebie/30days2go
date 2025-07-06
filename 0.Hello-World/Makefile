@@ -1,5 +1,5 @@
 TARGET = main
-HELLO_WORLD = hello-world
+NAME = hello-world
 SRC = main.go
 GREEN = \033[0;32m
 RED = \033[0;31m
@@ -10,6 +10,8 @@ $(TARGET):
 	@if [ -f $(TARGET) ]; then \
 		@echo "hello-world already exists, skipping build"; \
 		exit 0; \
+	elif [ -f $(NAME) ]; then \
+		rm -f $(NAME) go.mod; \
 	fi
 	@echo "$(GREEN)[Running] $(RED)go build -o $(TARGET) $(SRC)$(NC)";
 	go build -o $(TARGET) $(SRC)
@@ -18,26 +20,28 @@ run:
 	@if [ -f $(TARGET) ]; then \
 		echo "$(GREEN)[Running] $(RED)./$(TARGET)$(NC)"; \
 		./$(TARGET); \
-	elif [ -f $(HELLO_WORLD) ]; then \
-		echo "$(GREEN)[Running] $(RED)./$(HELLO_WORLD)$(NC)"; \
-		./$(HELLO_WORLD); \
+	elif [ -f $(NAME) ]; then \
+		echo "$(GREEN)[Running] $(RED)./$(NAME)$(NC)"; \
+		./$(NAME); \
 	else \
 		echo "$(GREEN)-> Running: $(RED)go run $(SRC)$(NC)"; \
 		go run $(SRC); \
 	fi
 
 rename:
-	@if [ -f $(HELLO_WORLD) ]; then \
+	@if [ -f $(NAME) ]; then \
 		@echo "hello-world already exists, skipping rename"; \
 		exit 0; \
+	elif [ -f $(TARGET) ]; then \
+		rm -f $(TARGET); \
 	fi
-	@echo "$(GREEN)[Running] $(RED)go mod init $(HELLO_WORLD)$(NC)";
-	@go mod init $(HELLO_WORLD)
-	@echo "$(GREEN)[Running] $(RED)go build -o $(HELLO_WORLD) $(SRC)$(NC)";
-	go build -o $(HELLO_WORLD) $(SRC)
+	@echo "$(GREEN)[Running] $(RED)go mod init $(NAME)$(NC)";
+	@go mod init $(NAME)
+	@echo "$(GREEN)[Running] $(RED)go build -o $(NAME) $(SRC)$(NC)";
+	go build -o $(NAME) $(SRC)
 
 clean:
-	rm -f $(TARGET) hello-world go.mod go.sum
+	rm -f $(TARGET) $(NAME) go.mod
 
 re: clean all
 
