@@ -15,9 +15,9 @@ $(TARGET):
 	elif [ -f $(NAME) ]; then \
 		rm -f $(NAME) go.mod; \
 	fi
-	@printf "$(GREEN)[Running] $(RED)go build -o $(TARGET) $(SRC)$(NC)\n"
+	@echo "$(GREEN)[Running] $(RED)go build -o $(TARGET) $(SRC)$(NC)"
 	go build -o $(TARGET) $(SRC)
-	@printf "$(RED)Usage:$(NC) ./$(TARGET) <arguments>\n"
+	@echo "$(RED)Usage:$(NC) ./$(TARGET) <arguments>"
 
 rename:
 	@if [ -f $(NAME) ]; then \
@@ -26,11 +26,11 @@ rename:
 	elif [ -f $(TARGET) ]; then \
 		rm -f $(TARGET); \
 	fi
-	@printf "$(GREEN)[Running] $(RED)go mod init $(NAME)$(NC)\n"
+	@echo "$(GREEN)[Running] $(RED)go mod init $(NAME)$(NC)"
 	go mod init $(NAME)
-	@printf "$(GREEN)[Running] $(RED)go build -o $(NAME) $(SRC)$(NC)\n"
+	@echo "$(GREEN)[Running] $(RED)go build -o $(NAME) $(SRC)$(NC)"
 	go build -o $(NAME) $(SRC)
-	@printf "$(RED)Usage:$(NC) ./$(NAME) <arguments>\n"
+	@echo "$(RED)Usage:$(NC) ./$(NAME) <arguments>"
 
 clean:
 	@rm -f $(TARGET) $(NAME) go.mod
