@@ -1,7 +1,6 @@
 # 30days2go
 
-## Goal
-Learn Go in 30 Days Through 30 Projects of Increasing Complexity
+My goal is to learn Go in 30 Days Through 30 Projects of Increasing Complexity
 
 ### Compilation
 Every mini-project has its own Makefile compiling the project different way
@@ -22,3 +21,7 @@ $> go build hello-world
 $> ./hello-world
 Hello-World!
 ```
+
+<p align="center">
+  <img src="https://go.dev/blog/go-brand/Go-Logo/SVG/Go-Logo_Blue.svg" width="160" alt="Go Logo">
+</p>
