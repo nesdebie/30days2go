@@ -67,7 +67,7 @@ func main() {
 				langMap["fr"],
 				langMap["de"],
 				langMap["es"],
-				langMap["fit"],
+				langMap["it"],
 			}
 			output = append(output, row)
 			fmt.Println("[ADD] #", i, " - ", langMap["en"])
