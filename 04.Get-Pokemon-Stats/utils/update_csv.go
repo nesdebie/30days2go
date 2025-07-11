@@ -24,7 +24,7 @@ func main() {
 	const maxID = 1025
 
 	output := [][]string{
-		{"id", "en", "ja", "fr", "de", "es", "it"},
+		{"id", "en", "fr", "de", "es", "it"},
 	}
 
 	client := &http.Client{
@@ -33,44 +33,43 @@ func main() {
 
 	for i := 1; i <= maxID; i++ {
 		url := fmt.Sprintf("https://pokeapi.co/api/v2/pokemon-species/%d", i)
-		resp, err := client.Get(url)
+		apiResponse, err := client.Get(url)
 		if err != nil {
 			fmt.Printf("Error on ID %d: %v\n", i, err)
 			continue
 		}
 
-		if resp.StatusCode != 200 {
-			resp.Body.Close()
+		if apiResponse.StatusCode != 200 {
+			apiResponse.Body.Close()
 			continue
 		}
 
 		var species PokemonSpecies
-		err = json.NewDecoder(resp.Body).Decode(&species)
-		resp.Body.Close()
+		err = json.NewDecoder(apiResponse.Body).Decode(&species)
+		apiResponse.Body.Close()
 		if err != nil {
 			fmt.Printf("Error decoding JSON on ID %d: %v\n", i, err)
 			continue
 		}
 
-		langMap := map[string]string{"en": "", "ja": "", "fr": "", "de": "", "es": "", "it": ""}
+		languageMap := map[string]string{"en": "", "fr": "", "de": "", "es": "", "it": ""}
 		for _, entry := range species.Names {
-			if _, ok := langMap[entry.Language.Name]; ok {
-				langMap[entry.Language.Name] = entry.Name
+			if _, ok := languageMap[entry.Language.Name]; ok {
+				languageMap[entry.Language.Name] = entry.Name
 			}
 		}
 
-		if langMap["en"] != "" && langMap["ja"] != "" && langMap["fr"] != "" && langMap["de"] != "" && langMap["es"] != "" && langMap["it"] != "" {
+		if languageMap["en"] != "" && languageMap["fr"] != "" && languageMap["de"] != "" && languageMap["es"] != "" && languageMap["it"] != "" {
 			row := []string{
 				fmt.Sprintf("%d", i),
-				langMap["en"],
-				langMap["ja"],
-				langMap["fr"],
-				langMap["de"],
-				langMap["es"],
-				langMap["it"],
+				languageMap["en"],
+				languageMap["fr"],
+				languageMap["de"],
+				languageMap["es"],
+				languageMap["it"],
 			}
 			output = append(output, row)
-			fmt.Println("[ADD] #", i, " - ", langMap["en"])
+			fmt.Println("[ADD] #", i, " - ", languageMap["en"])
 		}
 
 		time.Sleep(100 * time.Millisecond)

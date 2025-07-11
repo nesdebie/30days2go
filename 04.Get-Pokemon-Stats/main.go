@@ -43,9 +43,11 @@ type Pokemon struct {
 }
 
 func removeAccents(s string) string {
-	t := norm.NFD.String(s)
-	result := make([]rune, 0, len(t))
-	for _, r := range t {
+	decomposed := norm.NFD.String(s)
+
+	var result []rune
+
+	for _, r := range decomposed {
 		if unicode.Is(unicode.Mn, r) {
 			continue
 		}
@@ -54,7 +56,7 @@ func removeAccents(s string) string {
 	return string(result)
 }
 
-func loadPokemonNameMap(path string) (map[string]int, error) {
+func loadCsv(path string) (map[string]int, error) {
 	file, err := os.Open(path)
 	if err != nil {
 		return nil, err
@@ -67,7 +69,7 @@ func loadPokemonNameMap(path string) (map[string]int, error) {
 		return nil, err
 	}
 
-	nameToID := make(map[string]int)
+	csv := make(map[string]int)
 	for _, row := range records[1:] {
 		id, err := strconv.Atoi(row[0])
 		if err != nil {
@@ -75,66 +77,66 @@ func loadPokemonNameMap(path string) (map[string]int, error) {
 		}
 		for _, name := range row[1:] {
 			key := removeAccents(strings.ToLower(name))
-			nameToID[key] = id
+			csv[key] = id
 		}
 	}
-	return nameToID, nil
+	return csv, nil
 }
 
-func getPokemonIDFromAnyLanguageCSV(input string, nameToID map[string]int) (int, error) {
-	key := removeAccents(strings.ToLower(input))
-	if id, ok := nameToID[key]; ok {
-		return id, nil
+func getPokemonIdFromCsv(pokemonName string, pokemonCsv map[string]int) (int, error) {
+	key := removeAccents(strings.ToLower(pokemonName))
+	if pokemonId, ok := pokemonCsv[key]; ok {
+		return pokemonId, nil
 	}
-	return 0, fmt.Errorf("Pokémon name '%s' not found", input)
+	return 0, fmt.Errorf("Pokémon name '%s' not found", pokemonName)
 }
 
-func printPokemonStatsAndTypes(pkmn *Pokemon) {
-	fmt.Printf("%s:\n", strings.Title(pkmn.Name))
+func printPokemonStatsAndTypes(pokemon *Pokemon) {
+	fmt.Printf("%s:\n", strings.Title(pokemon.Name))
 	fmt.Print("Type: ")
-	for i, t := range pkmn.Types {
+	for i, t := range pokemon.Types {
 		if i > 0 {
 			fmt.Print("")
 		}
 		fmt.Print("[" + t.Type.Name + "]")
 	}
 	fmt.Println()
-	for _, stat := range pkmn.Stats {
+	for _, stat := range pokemon.Stats {
 		fmt.Printf("  %s: %d\n", stat.StatInfo.Name, stat.BaseStat)
 	}
 }
 
 func main() {
-	if len(os.Args) < 2 {
+	if len(os.Args) != 2 {
 		fmt.Println("Usage:", os.Args[0], "<pokemon>")
 		return
 	}
 
-	nameToID, err := loadPokemonNameMap("pokemon_names_multilang.csv")
+	pokemonCsv, err := loadCsv("pokemon_names_multilang.csv")
 	if err != nil {
 		fmt.Println("Error loading CSV:", err)
 		return
 	}
 
-	input := os.Args[1]
+	pokemonName := os.Args[1]
 
-	id, err := getPokemonIDFromAnyLanguageCSV(input, nameToID)
+	pokemonId, err := getPokemonIdFromCsv(pokemonName, pokemonCsv)
 	if err != nil {
 		fmt.Println("Error:", err)
 		return
 	}
 
-	url := fmt.Sprintf("https://pokeapi.co/api/v2/pokemon/%d", id)
-	resp, err := http.Get(url)
+	url := fmt.Sprintf("https://pokeapi.co/api/v2/pokemon/%d", pokemonId)
+	apiResponse, err := http.Get(url)
 	if err != nil {
 		fmt.Println("Error fetching Pokémon data:", err)
 		return
 	}
-	defer resp.Body.Close()
+	defer apiResponse.Body.Close()
 
-	body, _ := ioutil.ReadAll(resp.Body)
-	var pkmn Pokemon
-	json.Unmarshal(body, &pkmn)
+	body, _ := ioutil.ReadAll(apiResponse.Body)
+	var pokemon Pokemon
+	json.Unmarshal(body, &pokemon)
 
-	printPokemonStatsAndTypes(&pkmn)
+	printPokemonStatsAndTypes(&pokemon)
 }

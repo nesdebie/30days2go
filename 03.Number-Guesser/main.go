@@ -15,14 +15,14 @@ func main() {
 		return
 	}
 
-	max, error := strconv.Atoi(os.Args[1])
-	if error != nil || max <= 0 {
+	max, err := strconv.Atoi(os.Args[1])
+	if err != nil || max <= 0 {
 		fmt.Println("Invalid input. Please provide a positive integer.")
 		return
 	}
 
-	numberToGuess, error := rand.Int(rand.Reader, big.NewInt(int64(max)))
-	if error != nil {
+	numberToGuess, err := rand.Int(rand.Reader, big.NewInt(int64(max)))
+	if err != nil {
 		fmt.Println("Failed to generate a random number.")
 		return
 	}
@@ -32,15 +32,15 @@ func main() {
 		var input string
 		fmt.Scanln(&input)
 
-		guessedNumber, error := strconv.Atoi(input)
-		if error != nil || guessedNumber < 0 || guessedNumber >= max {
+		guessedNumber, err := strconv.Atoi(input)
+		if err != nil || guessedNumber < 0 || guessedNumber >= max {
 			fmt.Println("Invalid input. Please provide a number between 0 and", max-1)
 			continue
 		}
 
-		guess := big.NewInt(int64(guessedNumber)) // same format as numberToGuess 
+		formatedGuessedNumber := big.NewInt(int64(guessedNumber)) // same format as numberToGuess 
 
-		switch guess.Cmp(numberToGuess) {
+		switch formatedGuessedNumber.Cmp(numberToGuess) {
 		case -1:
 			fmt.Println("Too low!")
 		case 1:

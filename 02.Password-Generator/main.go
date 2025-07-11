@@ -11,11 +11,11 @@ func generatePassword(length int) string {
     const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()-_=+[]{}|;:,.<>?/~`"
     password := make([]byte, length)
     for i := range password {
-        num, err := rand.Int(rand.Reader, big.NewInt(int64(len(charset))))
+        randomNumber, err := rand.Int(rand.Reader, big.NewInt(int64(len(charset))))
         if err != nil {
             return ""
         }
-        password[i] = charset[num.Int64()]
+        password[i] = charset[randomNumber.Int64()]
     }
     return string(password)
 }
@@ -26,16 +26,16 @@ func main() {
 
 	var input string
 	fmt.Scanln(&input)
-	len, err := strconv.Atoi(input)
-	if err != nil || len <= 15 {
+	passwordLength, err := strconv.Atoi(input)
+	if err != nil || passwordLength <= 15 {
 		fmt.Println("Invalid input. Set to defqult size of 16 characters.")
-		len = 16
+		passwordLength = 16
 	}
-	if len > 64 {
+	if passwordLength > 64 {
 		fmt.Println("Warning: Length is too long, setting to 64 characters.")
-		len = 64
+		passwordLength = 64
 	}
-	fmt.Printf("Generating a password of %d characters\n", len)
-	password := generatePassword(len)
+	fmt.Printf("Generating a password of %d characters\n", passwordLength)
+	password := generatePassword(passwordLength)
 	fmt.Println(password)
 }
