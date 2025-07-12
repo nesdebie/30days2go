@@ -20,8 +20,54 @@ type PokemonSpecies struct {
 	Names []NameEntry `json:"names"`
 }
 
+type PokemonResponse struct {
+    Count int `json:"count"`
+}
+
+func getMaxId() int {
+    resp, err := http.Get("https://pokeapi.co/api/v2/pokemon")
+    if err != nil {
+        fmt.Println("Error fetching Pokémon count:", err)
+        return 0
+    }
+    defer resp.Body.Close()
+
+    var apiResp PokemonResponse
+    if err := json.NewDecoder(resp.Body).Decode(&apiResp); err != nil {
+        fmt.Println("Error decoding Pokémon count:", err)
+        return 0
+    }
+
+    low := 1
+    high := apiResp.Count
+    maxValid := 0
+
+    for low <= high {
+        mid := (low + high) / 2
+        url := fmt.Sprintf("https://pokeapi.co/api/v2/pokemon/%d", mid)
+        resp, err := http.Get(url)
+
+        if err != nil {
+            fmt.Printf("Error checking ID %d: %v\n", mid, err)
+            return maxValid
+        }
+
+        resp.Body.Close()
+
+        if resp.StatusCode == 200 {
+            maxValid = mid
+            low = mid + 1
+        } else {
+            high = mid - 1
+        }
+    }
+
+    return maxValid
+}
+
+
 func main() {
-	const maxID = 1025
+	maxID := getMaxId()
 
 	output := [][]string{
 		{"id", "en", "fr", "de", "es", "it"},
