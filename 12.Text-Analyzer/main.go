@@ -64,6 +64,7 @@ func printingFrequency(m map[string]int, s []string) {
     }
     fmt.Println()
 }
+
 func main() {
     var filename string
     if len(os.Args) == 2 {
