@@ -9,24 +9,30 @@ import (
 	"net/http"
 	"os"
 	"strings"
+	"time"
 
 	"github.com/joho/godotenv"
 )
 
+
 type APIConfig struct {
 	ApiKey string
 }
+
 
 type WeatherResponse struct {
 	CityName string `json:"name"`
 	Main     struct {
 		Kelvin float64 `json:"temp"`
 	} `json:"main"`
+	Timezone int `json:"timezone"`
 }
 
 
-type Message struct {
-	Msg string `json:"message"`
+type FinalResponse struct {
+	Name      string  `json:"name"`
+	Temp      float64 `json:"temp"`
+	LocalTime string  `json:"local_time"`
 }
 
 
@@ -49,7 +55,6 @@ func loadConfig() (APIConfig, error) {
 	return config, nil
 }
 
-
 func weatherHandler(w http.ResponseWriter, r *http.Request) {
 	pathParts := strings.Split(r.URL.Path, "/")
 	if len(pathParts) < 3 || pathParts[2] == "" {
@@ -65,9 +70,17 @@ func weatherHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	json.NewEncoder(w).Encode(data)
-}
+	utcNow := time.Now().UTC()
+	localTime := utcNow.Add(time.Second * time.Duration(data.Timezone))
 
+	response := FinalResponse{
+		Name:      data.CityName,
+		Temp:      data.Main.Kelvin,
+		LocalTime: localTime.Format("2006-01-02 15:04:05"),
+	}
+
+	json.NewEncoder(w).Encode(response)
+}
 
 func getTemperature(city string) (*WeatherResponse, error) {
 	config, err := loadConfig()
@@ -75,8 +88,9 @@ func getTemperature(city string) (*WeatherResponse, error) {
 		return nil, fmt.Errorf("failed to load API key: %v", err)
 	}
 
-	apiURL := fmt.Sprintf("https://api.openweathermap.org/data/2.5/weather?q=%s&APPID=%s&units=metric", city, config.ApiKey)
+	apiURL := fmt.Sprintf("https://api.openweathermap.org/data/2.5/weather?q=%s&appid=%s&units=metric", city, config.ApiKey)
 	fmt.Println("API URL:", apiURL)
+
 	res, err := http.Get(apiURL)
 	if err != nil {
 		return nil, fmt.Errorf("failed to make request: %v", err)
@@ -99,7 +113,6 @@ func getTemperature(city string) (*WeatherResponse, error) {
 
 	return &weatherData, nil
 }
-
 
 func main() {
 	http.HandleFunc("/weather/", weatherHandler)
