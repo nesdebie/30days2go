@@ -1,4 +1,4 @@
-NAME = prime-number-lister
+NAME = weather-report
 SRC = main.go
 
 GREEN = \033[0;32m
@@ -12,8 +12,9 @@ $(NAME):
 	go mod init $(NAME)
 	@echo "$(GREEN)[Running] $(RED)go build -o $(NAME) $(SRC)$(NC)"
 
+	go get github.com/joho/godotenv
 	go build -o $(NAME) $(SRC)
-	@echo "$(RED)Usage: $(GREEN)./$(NAME) <first N prime numbers>$(NC)"
+	@echo "$(RED)Usage: $(GREEN)./$(NAME)$(NC)"
 
 clean:
 	@rm -f $(NAME) go.mod go.sum myText.txt
