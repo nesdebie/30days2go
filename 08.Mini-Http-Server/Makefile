@@ -16,8 +16,8 @@ $(NAME):
 
 	go build -o $(NAME) $(SRC)
 	@echo "$(RED)Usage: $(GREEN)./$(NAME)$(NC)"
-	@echo "$(RED)Visit: $(GREEN)curl localhost:8090/hello/<your_name>$(NC)"
-	@echo "$(RED)Visit: $(GREEN)curl localhost:8090/time$(NC)"
+	@echo "$(RED)Visit: $(GREEN)curl localhost:8080/hello/<your_name>$(NC)"
+	@echo "$(RED)Visit: $(GREEN)curl localhost:8080/time$(NC)"
 
 clean:
 	@rm -f $(NAME) go.mod go.sum
