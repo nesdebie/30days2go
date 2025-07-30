@@ -17,7 +17,7 @@ $(NAME):
 	@echo "$(RED)Usage: $(GREEN)./$(NAME)$(NC)"
 
 clean:
-	@rm -f $(NAME) go.mod go.sum myText.txt
+	@rm -f $(NAME) go.mod go.sum
 
 re: clean all
 

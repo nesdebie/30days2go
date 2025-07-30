@@ -1,4 +1,3 @@
-TARGET = main
 NAME = currency-converter
 SRC = main.go
 
@@ -9,12 +8,6 @@ NC = \033[0m
 all: $(NAME)
 
 $(NAME):
-	@if [ -f $(NAME) ]; then \
-		echo "$(NAME) already exists, skipping rename"; \
-		exit 0; \
-	elif [ -f $(TARGET) ]; then \
-		rm -f $(TARGET); \
-	fi
 	@echo "$(GREEN)[Running] $(RED)go mod init $(NAME)$(NC)"
 	go mod init $(NAME)
 	@echo "$(GREEN)[Running] $(RED)go build -o $(NAME) $(SRC)$(NC)"

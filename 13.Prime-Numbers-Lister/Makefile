@@ -16,7 +16,7 @@ $(NAME):
 	@echo "$(RED)Usage: $(GREEN)./$(NAME) <first N prime numbers>$(NC)"
 
 clean:
-	@rm -f $(NAME) go.mod go.sum myText.txt
+	@rm -f $(NAME) go.mod go.sum
 
 re: clean all
 
