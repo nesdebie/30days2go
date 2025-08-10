@@ -51,9 +51,9 @@ func main() {
 
     for result := range results {
         if result.Error != nil {
-            fmt.Printf("Erreur pour %s: %v\n", result.URL, result.Error)
+            fmt.Printf("Error for %s: %v\n", result.URL, result.Error)
         } else {
-            fmt.Printf("Ping vers %s : %v\n", result.URL, result.Duration)
+            fmt.Printf("Ping to %s : %v\n", result.URL, result.Duration)
         }
     }
 }
