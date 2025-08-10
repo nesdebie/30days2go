@@ -1,4 +1,4 @@
-NAME = online-file-manager
+NAME = multi-ping
 SRC = main.go
 
 GREEN = \033[0;32m
@@ -11,14 +11,12 @@ $(NAME):
 	@echo "$(GREEN)[Running] $(RED)go mod init $(NAME)$(NC)"
 	go mod init $(NAME)
 	@echo "$(GREEN)[Running] $(RED)go build -o $(NAME) $(SRC)$(NC)"
-
 	go build -o $(NAME) $(SRC)
-	@echo "$(RED)Usage: $(GREEN)./$(NAME)$(NC)"
-	@echo "$(RED)Visit: $(GREEN)localhost:8080$(NC)"
+	@echo "$(RED)Usage: $(GREEN)./$(NAME) <url_1> ... <url_N>$(NC)"
 
 clean:
-	@rm -f $(NAME) go.mod go.sum
+	@rm -rf $(NAME) go.mod go.sum
 
 re: clean all
 
-.PHONY: all clean re
+.PHONY: all clean csv re
