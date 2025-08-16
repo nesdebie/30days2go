@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
     "os"
     "bufio"
     "regexp"
@@ -12,7 +11,7 @@ import (
 
 func main() {
 	if len(os.Args) != 2 {
-		fmt.Println("Usage: " + os.Args[0] + " <logfile>")
+		log.Printf("Usage: %s <logfile>\n", os.Args[0])
 		os.Exit(1)
 	}
 	logfile, err := os.Open(os.Args[1])
