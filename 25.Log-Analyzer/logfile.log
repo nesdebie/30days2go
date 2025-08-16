@@ -1,0 +1,13 @@
+127.0.0.1 - alice [15/Aug/2025:09:05:11 +0200] "GET /home HTTP/1.1" 200 234 INFO Homepage loaded in 0.023s
+192.168.1.12 - bob [15/Aug/2025:10:13:46 +0200] "POST /api/order HTTP/2.0" 201 1024 INFO Order ID=4567 created, amount=129.99EUR
+10.10.10.10 - carol [15/Aug/2025:11:44:31 +0200] "PUT /api/product/321 HTTP/1.1" 400 512 WARNING Invalid price format: 'free'
+127.0.0.1 - alice [15/Aug/2025:13:06:59 +0200] "DELETE /comment/888 HTTP/1.1" 204 64 INFO Comment deleted, user privileges=moderator
+192.168.1.12 - bob [16/Aug/2025:07:20:02 +0200] "GET /api/log HTTP/2.0" 200 760 INFO Log data exported, lines=32768, duration=1.43s
+10.10.10.10 - carol [16/Aug/2025:08:25:12 +0200] "PATCH /api/user/123 HTTP/1.1" 401 128 ERROR Unauthorized access attempt detected, session=xyz123
+127.0.0.1 - alice [16/Aug/2025:09:47:22 +0200] "POST /api/payment HTTP/1.1" 500 32 ERROR Payment failed for transaction Tx3345: insufficient funds
+192.168.1.12 - bob [16/Aug/2025:09:48:09 +0200] "GET /status HTTP/2.0" 503 16 ERROR Service unavailable, retry in 60s
+10.10.10.10 - carol [16/Aug/2025:10:01:50 +0200] "GET /error HTTP/1.1" 500 512 ERROR Stacktrace: 
+    at main.go:42
+    at handler.go:117
+    at database.go:89
+127.0.0.1 - alice [16/Aug/2025:10:03:22 +0200] "PUT /api/user/555 HTTP/1.1" 201 240 INFO Profile updated: name=AliceM, country=FR, age=30
